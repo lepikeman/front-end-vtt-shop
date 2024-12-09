@@ -10,17 +10,25 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
       },
+      timeout: 5000,
     });
+
     this.api.interceptors.request.use((config) => {
+      console.log("Request Config:", config);
       const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
     });
+
     this.api.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log("Response Receive", response);
+        return response;
+      },
       (error) => {
+        console.log("API Error:", error);
         if (error.response?.status === 401) {
           localStorage.removeItem("token");
           window.location.href = "/login";
@@ -28,13 +36,6 @@ class ApiService {
         return Promise.reject(error);
       }
     );
-  }
-
-  async get<T>(endpoint: string): Promise<T> {
-    const response: AxiosResponse<BaseResponse<T>> = await this.api.get(
-      endpoint
-    );
-    return response.data.data;
   }
 
   async post<T, D>(endpoint: string, data: D): Promise<T> {
@@ -46,7 +47,30 @@ class ApiService {
   }
 
   async getProduct(): Promise<Product[]> {
-    return this.get<Product[]>("/products");
+    try {
+      const response = await this.api.get("/products");
+
+      console.log("Full Product Response:", response);
+
+      if (response.config.url !== "/products") {
+        console.warn("Unexpected route accessed");
+        return [];
+      }
+
+      if (Array.isArray(response.data)) {
+        return response.data;
+      }
+      if (response.data.data && Array.isArray(response.data.data)) {
+        return response.data.data;
+      }
+
+      console.error("Unexpected response structure:", response.data);
+      return [];
+
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return [];
+    }
   }
 
   async createProduct(

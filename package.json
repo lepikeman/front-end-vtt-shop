@@ -1,4 +1,5 @@
 {
+  "proxy": "http://54.37.11.89:3000",
   "name": "vtt-shop-projet",
   "private": true,
   "version": "0.0.0",

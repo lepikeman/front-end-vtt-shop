@@ -11,3 +11,4 @@ export interface Product {
   description: string;
   factorynew: boolean;
 }
+
