@@ -38,7 +38,7 @@ export const ProductList = () => {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            {product.product_name} {product.price}
+            {product.product_name} - {product.price}€ {product.description}
           </li>
         ))}
       </ul>

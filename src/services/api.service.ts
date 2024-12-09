@@ -6,7 +6,7 @@ class ApiService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: "http://54.37.11.89:3000/products",
+      baseURL: "http://54.37.11.89:3000",
       headers: {
         "Content-Type": "application/json",
       },
@@ -26,13 +26,13 @@ class ApiService {
           window.location.href = "/login";
         }
         return Promise.reject(error);
-      },
+      }
     );
   }
 
   async get<T>(endpoint: string): Promise<T> {
     const response: AxiosResponse<BaseResponse<T>> = await this.api.get(
-      endpoint,
+      endpoint
     );
     return response.data.data;
   }
@@ -40,7 +40,7 @@ class ApiService {
   async post<T, D>(endpoint: string, data: D): Promise<T> {
     const response: AxiosResponse<BaseResponse<T>> = await this.api.post(
       endpoint,
-      data,
+      data
     );
     return response.data.data;
   }
@@ -50,11 +50,11 @@ class ApiService {
   }
 
   async createProduct(
-    userData: Omit<Product, "id" | "createAt">,
+    userData: Omit<Product, "id" | "createAt">
   ): Promise<Product> {
     return this.post<Product, Omit<Product, "id" | "createAt">>(
       "/products",
-      userData,
+      userData
     );
   }
 }
