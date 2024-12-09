@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Product } from "../types/api.types.ts";
 import { apiService } from "../services/api.service.ts";
 
-
 export const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,7 +28,7 @@ export const ProductList = () => {
   if (error) return <p>Error: {error}</p>;
   if (!products || !Array.isArray(products)) return <p>Aucun Produit trouvé</p>;
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <h2>Liste des Produits</h2>
       <ul>
         {products.map((product) => (
